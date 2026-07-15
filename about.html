@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About — 자기소개</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Be+Vietnam+Pro:wght@400;500;700;800&family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="about.css" />
+  </head>
+  <body>
+    <div class="stage" aria-hidden="true">
+      <div class="grain"></div>
+      <div class="beam beam-a"></div>
+      <div class="beam beam-b"></div>
+      <div class="grid-line"></div>
+    </div>
+
+    <main class="shell">
+      <header class="top">
+        <nav class="nav" aria-label="페이지 이동">
+          <a class="nav-link" href="index.html" data-i18n="navTodo">일정</a>
+          <a class="nav-link is-active" href="about.html" data-i18n="navAbout" aria-current="page">소개</a>
+        </nav>
+        <button type="button" class="lang-btn" id="lang-btn" aria-pressed="false">
+          Tiếng Việt
+        </button>
+      </header>
+
+      <section class="hero">
+        <p class="eyebrow" data-i18n="eyebrow">Profile</p>
+        <h1 class="brand" data-i18n="brand">자기소개</h1>
+        <p class="lead" data-i18n="lead">
+          한국에 사는 20살. 게임과 맥주, 그게 나의 루틴이다.
+        </p>
+        <div class="hero-meta">
+          <span data-i18n="metaAge">2006년생</span>
+          <span class="dot" aria-hidden="true"></span>
+          <span data-i18n="metaGender">남자</span>
+          <span class="dot" aria-hidden="true"></span>
+          <span data-i18n="metaPlace">대한민국</span>
+        </div>
+      </section>
+
+      <section class="facts" aria-label="소개 정보">
+        <article class="fact" style="--i: 0">
+          <p class="fact-label" data-i18n="factOriginLabel">거주지</p>
+          <h2 class="fact-title" data-i18n="factOriginTitle">한국에서 사는 스무 살</h2>
+          <p class="fact-body" data-i18n="factOriginBody">
+            2006년생 남자. 담백하고 확실하게, 내 방식으로 하루를 굴린다.
+          </p>
+        </article>
+
+        <article class="fact" style="--i: 1">
+          <p class="fact-label" data-i18n="factHobbyLabel">취미</p>
+          <h2 class="fact-title" data-i18n="factHobbyTitle">리그 오브 레전드</h2>
+          <p class="fact-body" data-i18n="factHobbyBody">
+            게임은 취미를 넘어 루틴이다. 소환사의 협곡에서 집중하고, 한 판 한 판 호흡을 맞춘다.
+          </p>
+        </article>
+
+        <article class="fact" style="--i: 2">
+          <p class="fact-label" data-i18n="factBeerLabel">취향</p>
+          <h2 class="fact-title" data-i18n="factBeerTitle">맥주 없이는 못 산다</h2>
+          <p class="fact-body" data-i18n="factBeerBody">
+            하루의 끝은 시원한 맥주 한 잔으로. 그게 없으면 하루가 덜 끝난 기분이다.
+          </p>
+        </article>
+      </section>
+
+      <footer class="bottom">
+        <a class="cta" href="index.html" data-i18n="ctaTodo">일정 페이지로 이동</a>
+      </footer>
+    </main>
+
+    <script src="about.js"></script>
+  </body>
+</html>
