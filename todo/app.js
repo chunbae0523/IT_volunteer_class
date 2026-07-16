@@ -47,7 +47,10 @@ const I18N = {
     eveningSub: "시원한 밤을 즐겨요",
     deleteTask: "삭제",
     pageTitle: "Day Todo — 오늘의 일정",
+    navHome: "홈",
     navTodo: "일정",
+    navBudget: "가계부",
+    navWeather: "날씨",
     navAbout: "소개",
   },
   vi: {
@@ -74,7 +77,10 @@ const I18N = {
     eveningSub: "Tận hưởng đêm mát mẻ",
     deleteTask: "Xóa",
     pageTitle: "Day Todo — Lịch trình hôm nay",
+    navHome: "Trang chủ",
     navTodo: "Lịch trình",
+    navBudget: "Thu chi",
+    navWeather: "Thời tiết",
     navAbout: "Giới thiệu",
   },
 };

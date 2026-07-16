@@ -153,7 +153,8 @@ body[data-lang="vi"] .brand {
 
 .nav {
   display: flex;
-  gap: 0.4rem;
+  flex-wrap: wrap;
+  gap: 0.3rem;
   padding: 0.3rem;
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -164,9 +165,9 @@ body[data-lang="vi"] .brand {
 .nav-link {
   text-decoration: none;
   color: var(--ink-soft);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  padding: 0.55rem 1rem;
+  padding: 0.5rem 0.8rem;
   border-radius: 999px;
   transition:
     color 0.2s ease,
@@ -319,6 +320,8 @@ body[data-lang="vi"] .fact-title {
 .bottom {
   margin-top: 2.2rem;
   display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
   justify-content: flex-start;
   animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.55s both;
 }
@@ -340,9 +343,25 @@ body[data-lang="vi"] .fact-title {
     box-shadow 0.2s ease;
 }
 
+.cta-soft {
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  box-shadow: none;
+}
+
+.cta-soft:hover {
+  border-color: rgba(200, 146, 74, 0.65);
+  background: rgba(200, 146, 74, 0.12);
+}
+
 .cta:hover {
   transform: translateY(-2px);
   box-shadow: 0 18px 34px rgba(0, 0, 0, 0.42);
+}
+
+.cta-soft:hover {
+  box-shadow: none;
 }
 
 @keyframes rise {

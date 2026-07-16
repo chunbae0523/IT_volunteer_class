@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ledger — 가계부</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&family=DM+Sans:opsz,wght@9..40,400;500;700&family=Fraunces:opsz,wght@9..144,700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="budget.css" />
+  </head>
+  <body data-lang="ko">
+    <div class="bg" aria-hidden="true">
+      <div class="blob blob-a"></div>
+      <div class="blob blob-b"></div>
+      <div class="blob blob-c"></div>
+      <div class="shine"></div>
+    </div>
+
+    <main class="app">
+      <header class="top">
+        <nav class="nav" aria-label="페이지 이동">
+          <a class="nav-link" href="../index.html" data-i18n="navHome">홈</a>
+          <a class="nav-link" href="../todo/index.html" data-i18n="navTodo">일정</a>
+          <a class="nav-link is-active" href="budget.html" data-i18n="navBudget" aria-current="page">가계부</a>
+          <a class="nav-link" href="../weather/weather.html" data-i18n="navWeather">날씨</a>
+          <a class="nav-link" href="../about/about.html" data-i18n="navAbout">소개</a>
+        </nav>
+        <button type="button" class="lang-btn" id="lang-btn" aria-pressed="false">
+          Tiếng Việt
+        </button>
+      </header>
+
+      <section class="hero">
+        <p class="eyebrow" data-i18n="eyebrow">Daily Ledger</p>
+        <h1 class="brand" data-i18n="brand">가계부</h1>
+        <p class="tagline" data-i18n="tagline">하루 수입과 지출을 기록하고, 잔액을 한눈에 확인하세요.</p>
+      </section>
+
+      <section class="summary" aria-label="하루 요약">
+        <article class="stat income reveal" style="--i: 0">
+          <p class="stat-label" data-i18n="todayIncome">오늘 수입</p>
+          <p class="stat-value" id="today-income">₩0</p>
+        </article>
+        <article class="stat expense reveal" style="--i: 1">
+          <p class="stat-label" data-i18n="todayExpense">오늘 지출</p>
+          <p class="stat-value" id="today-expense">₩0</p>
+        </article>
+        <article class="stat net reveal" style="--i: 2" id="net-card">
+          <p class="stat-label" data-i18n="todayNet">하루 소득</p>
+          <p class="stat-value" id="today-net">₩0</p>
+        </article>
+      </section>
+
+      <section class="composer reveal" style="--i: 3">
+        <h2 class="section-title" data-i18n="addTitle">수입 · 지출 작성</h2>
+        <form id="entry-form" class="entry-form">
+          <div class="type-toggle" role="group" aria-label="유형">
+            <button type="button" class="type-btn is-active" data-type="income" id="type-income">
+              <span data-i18n="income">수입</span>
+            </button>
+            <button type="button" class="type-btn" data-type="expense" id="type-expense">
+              <span data-i18n="expense">지출</span>
+            </button>
+          </div>
+
+          <label class="field">
+            <span data-i18n="dateLabel">날짜</span>
+            <input type="date" id="entry-date" required />
+          </label>
+
+          <label class="field">
+            <span data-i18n="categoryLabel">카테고리</span>
+            <select id="entry-category" required>
+              <option value="salary" data-i18n="catSalary">급여</option>
+              <option value="food" data-i18n="catFood">식비</option>
+              <option value="transport" data-i18n="catTransport">교통</option>
+              <option value="shopping" data-i18n="catShopping">쇼핑</option>
+              <option value="others" data-i18n="catOthers">기타</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span data-i18n="amountLabel">금액</span>
+            <input
+              type="number"
+              id="entry-amount"
+              min="1"
+              step="1"
+              required
+              inputmode="numeric"
+              data-i18n-placeholder="amountPlaceholder"
+              placeholder="예: 15000"
+            />
+          </label>
+
+          <label class="field">
+            <span data-i18n="noteLabel">메모</span>
+            <input
+              type="text"
+              id="entry-note"
+              maxlength="60"
+              autocomplete="off"
+              data-i18n-placeholder="notePlaceholder"
+              placeholder="선택 사항"
+            />
+          </label>
+
+          <button type="submit" class="primary-btn" data-i18n="saveEntry">기록하기</button>
+        </form>
+      </section>
+
+      <section class="chart-panel reveal" style="--i: 4">
+        <div class="panel-head">
+          <h2 class="section-title" data-i18n="chartTitle">오늘 지출 · 카테고리별</h2>
+          <p class="panel-sub" data-i18n="chartSub">선택한 날짜의 지출 비율</p>
+        </div>
+        <div class="chart" id="chart" role="img" aria-label="카테고리별 지출 막대 그래프">
+          <div class="bar-col" data-cat="salary">
+            <div class="bar-track">
+              <div class="bar-fill" style="--h: 0%"></div>
+            </div>
+            <span class="bar-amount">₩0</span>
+            <span class="bar-label" data-i18n="catSalary">급여</span>
+          </div>
+          <div class="bar-col" data-cat="food">
+            <div class="bar-track">
+              <div class="bar-fill" style="--h: 0%"></div>
+            </div>
+            <span class="bar-amount">₩0</span>
+            <span class="bar-label" data-i18n="catFood">식비</span>
+          </div>
+          <div class="bar-col" data-cat="transport">
+            <div class="bar-track">
+              <div class="bar-fill" style="--h: 0%"></div>
+            </div>
+            <span class="bar-amount">₩0</span>
+            <span class="bar-label" data-i18n="catTransport">교통</span>
+          </div>
+          <div class="bar-col" data-cat="shopping">
+            <div class="bar-track">
+              <div class="bar-fill" style="--h: 0%"></div>
+            </div>
+            <span class="bar-amount">₩0</span>
+            <span class="bar-label" data-i18n="catShopping">쇼핑</span>
+          </div>
+          <div class="bar-col" data-cat="others">
+            <div class="bar-track">
+              <div class="bar-fill" style="--h: 0%"></div>
+            </div>
+            <span class="bar-amount">₩0</span>
+            <span class="bar-label" data-i18n="catOthers">기타</span>
+          </div>
+        </div>
+        <p class="chart-empty" id="chart-empty" data-i18n="chartEmpty">아직 지출 기록이 없어요.</p>
+      </section>
+
+      <section class="list-panel reveal" style="--i: 5">
+        <div class="panel-head">
+          <h2 class="section-title" data-i18n="listTitle">오늘 기록</h2>
+        </div>
+        <ul class="entry-list" id="entry-list"></ul>
+        <p class="list-empty" id="list-empty" data-i18n="listEmpty">기록이 없습니다. 위에서 추가해 보세요.</p>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" hidden></div>
+
+    <script src="budget.js"></script>
+  </body>
+</html>

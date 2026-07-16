@@ -7,6 +7,11 @@ const RING = 2 * Math.PI * 38;
 const I18N = {
   ko: {
     pageTitle: "Skyline — 날씨",
+    navHome: "홈",
+    navTodo: "일정",
+    navBudget: "가계부",
+    navWeather: "날씨",
+    navAbout: "소개",
     langBtn: "Tiếng Việt",
     searchLabel: "도시 검색",
     searchPlaceholder: "도시 검색",
@@ -37,6 +42,11 @@ const I18N = {
   },
   vi: {
     pageTitle: "Skyline — Thời tiết",
+    navHome: "Trang chủ",
+    navTodo: "Lịch trình",
+    navBudget: "Thu chi",
+    navWeather: "Thời tiết",
+    navAbout: "Giới thiệu",
     langBtn: "한국어",
     searchLabel: "Tìm thành phố",
     searchPlaceholder: "Tìm thành phố",

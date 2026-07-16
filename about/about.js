@@ -3,7 +3,10 @@ const STORAGE_KEY = "day-todo-v2";
 const I18N = {
   ko: {
     pageTitle: "About — 자기소개",
+    navHome: "홈",
     navTodo: "일정",
+    navBudget: "가계부",
+    navWeather: "날씨",
     navAbout: "소개",
     langBtn: "Tiếng Việt",
     eyebrow: "Profile",
@@ -25,10 +28,15 @@ const I18N = {
     factBeerBody:
       "하루의 끝은 시원한 맥주 한 잔으로. 그게 없으면 하루가 덜 끝난 기분이다.",
     ctaTodo: "일정 페이지로 이동",
+    ctaBudget: "가계부로 이동",
+    ctaWeather: "날씨로 이동",
   },
   vi: {
     pageTitle: "About — Giới thiệu",
+    navHome: "Trang chủ",
     navTodo: "Lịch trình",
+    navBudget: "Thu chi",
+    navWeather: "Thời tiết",
     navAbout: "Giới thiệu",
     langBtn: "한국어",
     eyebrow: "Hồ sơ",
@@ -50,6 +58,8 @@ const I18N = {
     factBeerBody:
       "Cuối ngày phải có một ly bia mát. Thiếu nó thì cảm giác ngày chưa thật sự kết thúc.",
     ctaTodo: "Sang trang lịch trình",
+    ctaBudget: "Sang sổ thu chi",
+    ctaWeather: "Sang thời tiết",
   },
 };
 

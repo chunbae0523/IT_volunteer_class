@@ -152,7 +152,8 @@ body {
 
 .nav {
   display: flex;
-  gap: 0.35rem;
+  flex-wrap: wrap;
+  gap: 0.3rem;
   padding: 0.28rem;
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 999px;
@@ -163,9 +164,9 @@ body {
 .nav-link {
   text-decoration: none;
   color: rgba(255, 255, 255, 0.82);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  padding: 0.5rem 0.95rem;
+  padding: 0.48rem 0.8rem;
   border-radius: 999px;
   transition:
     color 0.2s ease,

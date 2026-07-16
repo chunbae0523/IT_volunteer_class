@@ -20,13 +20,23 @@
 
     <main class="app">
       <header class="top">
-        <div class="brand-row">
-          <h1 class="brand">Skyline</h1>
+        <div class="site-nav-row">
+          <nav class="nav" aria-label="페이지 이동">
+            <a class="nav-link" href="../index.html" data-i18n="navHome">홈</a>
+            <a class="nav-link" href="../todo/index.html" data-i18n="navTodo">일정</a>
+            <a class="nav-link" href="../budget/budget.html" data-i18n="navBudget">가계부</a>
+            <a class="nav-link is-active" href="weather.html" data-i18n="navWeather" aria-current="page">날씨</a>
+            <a class="nav-link" href="../about/about.html" data-i18n="navAbout">소개</a>
+          </nav>
           <button type="button" class="lang-btn" id="lang-btn" aria-pressed="false">
             Tiếng Việt
           </button>
         </div>
-        <div class="search-row">
+        <div class="top-main">
+          <div class="brand-row">
+            <h1 class="brand">Skyline</h1>
+          </div>
+          <div class="search-row">
           <form class="search" id="search-form" role="search">
             <label class="sr-only" for="city-input" data-i18n="searchLabel">도시 검색</label>
             <input
@@ -76,6 +86,7 @@
               />
             </svg>
           </button>
+        </div>
         </div>
       </header>
 
