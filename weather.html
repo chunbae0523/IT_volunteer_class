@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skyline — 날씨</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&family=Syne:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="weather.css" />
+  </head>
+  <body data-weather="clear" data-lang="ko">
+    <div class="sky" aria-hidden="true">
+      <div class="sky-gradient"></div>
+      <div class="weather-fx" id="weather-fx"></div>
+    </div>
+
+    <main class="app">
+      <header class="top">
+        <div class="brand-row">
+          <h1 class="brand">Skyline</h1>
+          <button type="button" class="lang-btn" id="lang-btn" aria-pressed="false">
+            Tiếng Việt
+          </button>
+        </div>
+        <div class="search-row">
+          <form class="search" id="search-form" role="search">
+            <label class="sr-only" for="city-input" data-i18n="searchLabel">도시 검색</label>
+            <input
+              id="city-input"
+              type="search"
+              name="city"
+              data-i18n-placeholder="searchPlaceholder"
+              placeholder="도시 검색"
+              autocomplete="off"
+              required
+            />
+            <button type="submit" class="search-btn" data-i18n-aria="searchAria" aria-label="검색">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+                <path
+                  d="M16.5 16.5L21 21"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </form>
+          <button
+            type="button"
+            class="locate-btn"
+            id="locate-btn"
+            data-i18n-aria="locateAria"
+            aria-label="내 위치 날씨"
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <circle cx="12" cy="12" r="3" fill="currentColor" />
+              <path
+                d="M12 2v3M12 19v3M2 12h3M19 12h3"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+              <circle
+                cx="12"
+                cy="12"
+                r="8"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="result" id="result" hidden>
+        <div class="summary">
+          <div class="hero-block reveal" style="--d: 0">
+            <p class="city" id="city-name"></p>
+            <p class="condition" id="condition"></p>
+            <p class="temp" id="temp"></p>
+            <p class="feels" id="feels"></p>
+          </div>
+
+          <div class="range reveal" style="--d: 1" data-i18n-aria="tempRangeAria" aria-label="최저·최고 기온">
+            <div class="range-labels">
+              <span id="temp-min"></span>
+              <span id="temp-max"></span>
+            </div>
+            <div class="range-track">
+              <div class="range-fill" id="temp-range-fill"></div>
+              <div class="range-marker" id="temp-range-marker"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="meters" data-i18n-aria="metricsAria" aria-label="날씨 지표">
+          <article class="meter reveal" style="--d: 2">
+            <header class="meter-head">
+              <span data-i18n="humidity">습도</span>
+              <strong id="humidity-value">—</strong>
+            </header>
+            <div class="ring" role="img" data-i18n-aria="humidity" aria-label="습도">
+              <svg viewBox="0 0 96 96">
+                <circle class="ring-track" cx="48" cy="48" r="38" />
+                <circle class="ring-fill" id="humidity-ring-fill" cx="48" cy="48" r="38" />
+              </svg>
+              <span class="ring-label" id="humidity-ring-label">0%</span>
+            </div>
+          </article>
+
+          <article class="meter reveal" style="--d: 3">
+            <header class="meter-head">
+              <span data-i18n="wind">바람</span>
+              <strong id="wind-value">—</strong>
+            </header>
+            <div class="compass" id="wind-compass" aria-hidden="true">
+              <div class="compass-dial">
+                <span class="compass-n">N</span>
+                <span class="compass-needle" id="wind-needle"></span>
+              </div>
+            </div>
+          </article>
+
+          <article class="meter reveal" style="--d: 4">
+            <header class="meter-head">
+              <span data-i18n="clouds">구름</span>
+              <strong id="clouds-value">—</strong>
+            </header>
+            <div class="bar" aria-hidden="true">
+              <div class="bar-fill" id="clouds-bar"></div>
+            </div>
+          </article>
+
+          <article class="meter reveal" style="--d: 5">
+            <header class="meter-head">
+              <span data-i18n="visibility">가시거리</span>
+              <strong id="visibility-value">—</strong>
+            </header>
+            <div class="bar" aria-hidden="true">
+              <div class="bar-fill" id="visibility-bar"></div>
+            </div>
+          </article>
+
+          <article class="meter reveal" style="--d: 6">
+            <header class="meter-head">
+              <span data-i18n="pressure">기압</span>
+              <strong id="pressure-value">—</strong>
+            </header>
+            <div class="bar" aria-hidden="true">
+              <div class="bar-fill" id="pressure-bar"></div>
+            </div>
+          </article>
+
+          <article class="meter reveal" style="--d: 7">
+            <header class="meter-head">
+              <span data-i18n="sunTimes">일출 · 일몰</span>
+              <strong id="sun-value">—</strong>
+            </header>
+            <div class="sun-track" aria-hidden="true">
+              <div class="sun-arc">
+                <div class="sun-dot" id="sun-dot"></div>
+              </div>
+              <div class="sun-times">
+                <span id="sunrise">—</span>
+                <span id="sunset">—</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <p class="status" id="status" role="status"></p>
+    </main>
+
+    <script src="weather.js"></script>
+  </body>
+</html>
