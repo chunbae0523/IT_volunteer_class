@@ -11,6 +11,8 @@ const I18N = {
     navTodo: "일정",
     navBudget: "가계부",
     navWeather: "날씨",
+    navFlash: "플래시",
+    navTravel: "여행",
     navAbout: "소개",
     langBtn: "Tiếng Việt",
     searchLabel: "도시 검색",
@@ -46,6 +48,8 @@ const I18N = {
     navTodo: "Lịch trình",
     navBudget: "Thu chi",
     navWeather: "Thời tiết",
+    navFlash: "Flash",
+    navTravel: "Du lịch",
     navAbout: "Giới thiệu",
     langBtn: "한국어",
     searchLabel: "Tìm thành phố",
@@ -180,7 +184,8 @@ function clearFx() {
   weatherFx.innerHTML = "";
 }
 
-function addRain(count = 70) {
+function addRain(count = 24) {
+  const frag = document.createDocumentFragment();
   for (let i = 0; i < count; i += 1) {
     const drop = document.createElement("span");
     drop.className = "rain-drop";
@@ -188,11 +193,13 @@ function addRain(count = 70) {
     drop.style.animationDuration = `${0.55 + Math.random() * 0.7}s`;
     drop.style.animationDelay = `${-Math.random() * 2}s`;
     drop.style.opacity = String(0.35 + Math.random() * 0.55);
-    weatherFx.appendChild(drop);
+    frag.appendChild(drop);
   }
+  weatherFx.appendChild(frag);
 }
 
-function addSnow(count = 45) {
+function addSnow(count = 16) {
+  const frag = document.createDocumentFragment();
   for (let i = 0; i < count; i += 1) {
     const flake = document.createElement("span");
     flake.className = "snowflake";
@@ -203,8 +210,9 @@ function addSnow(count = 45) {
     flake.style.animationDuration = `${3.5 + Math.random() * 5}s`;
     flake.style.animationDelay = `${-Math.random() * 5}s`;
     flake.style.opacity = String(0.45 + Math.random() * 0.5);
-    weatherFx.appendChild(flake);
+    frag.appendChild(flake);
   }
+  weatherFx.appendChild(frag);
 }
 
 function addClouds() {
@@ -252,16 +260,16 @@ function renderWeatherFx(theme) {
     case "rain":
     case "drizzle":
       addClouds();
-      addRain(theme === "drizzle" ? 40 : 80);
+      addRain(theme === "drizzle" ? 14 : 24);
       break;
     case "thunderstorm":
       addClouds();
-      addRain(90);
+      addRain(28);
       addLightning();
       break;
     case "snow":
       addClouds();
-      addSnow();
+      addSnow(16);
       break;
     case "atmosphere":
       addFog();
@@ -302,11 +310,13 @@ function resetVisuals() {
 
 function playReveal() {
   resultEl.classList.remove("is-ready");
-  void resultEl.offsetWidth;
-  resultEl.classList.add("is-ready");
+  requestAnimationFrame(() => resultEl.classList.add("is-ready"));
 }
 
+let tempRafId = null;
+
 function animateTemp(target) {
+  cancelAnimationFrame(tempRafId);
   const start = performance.now();
   const duration = 700;
   const from = 0;
@@ -316,10 +326,10 @@ function animateTemp(target) {
     const eased = 1 - (1 - progress) ** 3;
     const value = Math.round(from + (target - from) * eased);
     tempEl.textContent = `${value}°`;
-    if (progress < 1) requestAnimationFrame(frame);
+    if (progress < 1) tempRafId = requestAnimationFrame(frame);
   }
 
-  requestAnimationFrame(frame);
+  tempRafId = requestAnimationFrame(frame);
 }
 
 function updateVisuals(data) {

@@ -32,6 +32,9 @@ const I18N = {
     addTask: "일정 추가",
     reset: "모두 초기화",
     toastAllDone: "오늘 일정을 모두 끝냈어요!",
+    toastNewDay: "자정이 지나 일정을 새로 시작해요.",
+    emptyTitle: "아직 일정이 없어요",
+    emptyDesc: "아래 버튼으로 오늘의 할 일을 추가해 보세요.",
     modalTitle: "새 일정 추가",
     periodLabel: "시간대",
     taskLabel: "할 일",
@@ -51,6 +54,8 @@ const I18N = {
     navTodo: "일정",
     navBudget: "가계부",
     navWeather: "날씨",
+    navFlash: "플래시",
+    navTravel: "여행",
     navAbout: "소개",
   },
   vi: {
@@ -62,6 +67,9 @@ const I18N = {
     addTask: "Thêm lịch trình",
     reset: "Đặt lại tất cả",
     toastAllDone: "Bạn đã hoàn thành mọi việc hôm nay!",
+    toastNewDay: "Đã qua nửa đêm — lịch trình được làm mới.",
+    emptyTitle: "Chưa có lịch trình",
+    emptyDesc: "Nhấn nút bên dưới để thêm việc cần làm hôm nay.",
     modalTitle: "Thêm lịch trình mới",
     periodLabel: "Buổi",
     taskLabel: "Việc cần làm",
@@ -81,6 +89,8 @@ const I18N = {
     navTodo: "Lịch trình",
     navBudget: "Thu chi",
     navWeather: "Thời tiết",
+    navFlash: "Flash",
+    navTravel: "Du lịch",
     navAbout: "Giới thiệu",
   },
 };
@@ -119,11 +129,40 @@ function t(key) {
   return I18N[store.lang][key] || I18N.ko[key] || key;
 }
 
+function todayKey() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+function msUntilNextMidnight() {
+  const now = new Date();
+  const next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+  return Math.max(next.getTime() - now.getTime(), 0);
+}
+
+function cloneDefaults() {
+  return DEFAULT_TASKS.map((task) => ({ ...task }));
+}
+
+function normalizeTasks(parsed) {
+  if (Array.isArray(parsed.tasks)) {
+    return parsed.tasks.filter(
+      (task) => task && typeof task === "object" && typeof task.id === "string"
+    );
+  }
+  const custom = Array.isArray(parsed.customTasks) ? parsed.customTasks : [];
+  return [...cloneDefaults(), ...custom];
+}
+
 function loadStore() {
   const fallback = {
     lang: "ko",
     done: {},
-    customTasks: [],
+    tasks: cloneDefaults(),
+    dateKey: todayKey(),
   };
 
   try {
@@ -133,11 +172,44 @@ function loadStore() {
     return {
       lang: parsed.lang === "vi" ? "vi" : "ko",
       done: parsed.done && typeof parsed.done === "object" ? parsed.done : {},
-      customTasks: Array.isArray(parsed.customTasks) ? parsed.customTasks : [],
+      tasks: normalizeTasks(parsed),
+      dateKey: typeof parsed.dateKey === "string" ? parsed.dateKey : null,
     };
   } catch {
     return fallback;
   }
+}
+
+function resetDayProgress() {
+  store.done = {};
+  store.tasks = [];
+  store.dateKey = todayKey();
+  saveStore();
+}
+
+/** 날짜가 바뀌었으면 완료 체크를 비우고 true를 반환 */
+function ensureFreshDay() {
+  const today = todayKey();
+  if (!store.dateKey) {
+    store.dateKey = today;
+    saveStore();
+    return false;
+  }
+  if (store.dateKey === today) return false;
+  resetDayProgress();
+  return true;
+}
+
+function scheduleMidnightReset() {
+  clearTimeout(scheduleMidnightReset.timer);
+  const delay = msUntilNextMidnight() + 50;
+  scheduleMidnightReset.timer = setTimeout(() => {
+    if (ensureFreshDay()) {
+      render();
+      showToast(t("toastNewDay"));
+    }
+    scheduleMidnightReset();
+  }, delay);
 }
 
 function migrateLegacy(fallback) {
@@ -155,11 +227,20 @@ function migrateLegacy(fallback) {
 }
 
 function saveStore() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify({
+      lang: store.lang,
+      done: store.done,
+      tasks: store.tasks,
+      customTasks: [],
+      dateKey: store.dateKey,
+    })
+  );
 }
 
 function getAllTasks() {
-  return [...DEFAULT_TASKS, ...store.customTasks];
+  return store.tasks;
 }
 
 function tasksForPeriod(periodId) {
@@ -233,8 +314,22 @@ function render() {
   applyI18n();
   sectionsEl.innerHTML = "";
 
+  if (getAllTasks().length === 0) {
+    const empty = document.createElement("div");
+    empty.className = "empty-state";
+    empty.innerHTML = `
+      <p class="empty-title">${t("emptyTitle")}</p>
+      <p class="empty-desc">${t("emptyDesc")}</p>
+    `;
+    sectionsEl.appendChild(empty);
+    updateProgress(false);
+    return;
+  }
+
   PERIOD_ORDER.forEach((periodId, periodIndex) => {
     const tasks = tasksForPeriod(periodId);
+    if (tasks.length === 0) return;
+
     const section = document.createElement("article");
     section.className = "section";
     section.dataset.period = periodId;
@@ -275,15 +370,10 @@ function render() {
       li.setAttribute("aria-checked", String(isDone(task.id)));
       li.tabIndex = 0;
 
-      const isCustom = Boolean(task.custom);
       li.innerHTML = `
         <span class="checkbox">${createCheckIcon()}</span>
         <span class="task-text">${escapeHtml(taskLabel(task))}</span>
-        ${
-          isCustom
-            ? `<button type="button" class="delete-btn" aria-label="${t("deleteTask")}">×</button>`
-            : ""
-        }
+        <button type="button" class="delete-btn" aria-label="${t("deleteTask")}">×</button>
       `;
 
       const toggle = () => {
@@ -308,15 +398,13 @@ function render() {
         }
       });
 
-      if (isCustom) {
-        li.querySelector(".delete-btn").addEventListener("click", (event) => {
-          event.stopPropagation();
-          store.customTasks = store.customTasks.filter((item) => item.id !== task.id);
-          delete store.done[task.id];
-          saveStore();
-          render();
-        });
-      }
+      li.querySelector(".delete-btn").addEventListener("click", (event) => {
+        event.stopPropagation();
+        store.tasks = store.tasks.filter((item) => item.id !== task.id);
+        delete store.done[task.id];
+        saveStore();
+        render();
+      });
 
       list.appendChild(li);
     });
@@ -348,6 +436,8 @@ function updateSectionMeter(section, periodId) {
     `${doneInSection}/${totalInSection}`;
 }
 
+let celebratedDate = null;
+
 function updateProgress(animateValue) {
   const tasks = getAllTasks();
   const total = tasks.length;
@@ -364,13 +454,16 @@ function updateProgress(animateValue) {
 
   if (animateValue) {
     gauge.classList.remove("pulse");
-    void gauge.offsetWidth;
-    gauge.classList.add("pulse");
+    requestAnimationFrame(() => gauge.classList.add("pulse"));
   }
 
-  if (done === total && total > 0) {
-    showToast();
+  const complete = done === total && total > 0;
+  if (complete && celebratedDate !== store.dateKey) {
+    celebratedDate = store.dateKey;
+    showToast(t("toastAllDone"));
     burstConfetti();
+  } else if (!complete) {
+    celebratedDate = null;
   }
 }
 
@@ -385,9 +478,9 @@ function celebrateTask(taskEl) {
   );
 }
 
-function showToast() {
+function showToast(message) {
   toast.hidden = false;
-  toast.textContent = t("toastAllDone");
+  toast.textContent = message || t("toastAllDone");
   requestAnimationFrame(() => toast.classList.add("show"));
   clearTimeout(showToast.timer);
   showToast.timer = setTimeout(() => {
@@ -400,16 +493,20 @@ function showToast() {
 
 function burstConfetti() {
   const colors = ["#f2c14e", "#e07a5f", "#81b29a", "#7ec8e3", "#ffffff"];
-  for (let i = 0; i < 28; i += 1) {
+  const frag = document.createDocumentFragment();
+  const pieces = [];
+  for (let i = 0; i < 12; i += 1) {
     const piece = document.createElement("span");
     piece.className = "confetti";
     piece.style.left = `${Math.random() * 100}vw`;
     piece.style.background = colors[i % colors.length];
-    piece.style.animationDuration = `${1.8 + Math.random() * 1.4}s`;
-    piece.style.animationDelay = `${Math.random() * 0.2}s`;
-    document.body.appendChild(piece);
-    setTimeout(() => piece.remove(), 3600);
+    piece.style.animationDuration = `${1.6 + Math.random()}s`;
+    piece.addEventListener("animationend", () => piece.remove(), { once: true });
+    frag.appendChild(piece);
+    pieces.push(piece);
   }
+  document.body.appendChild(frag);
+  window.setTimeout(() => pieces.forEach((p) => p.remove()), 3200);
 }
 
 langBtn.addEventListener("click", () => {
@@ -436,13 +533,12 @@ addForm.addEventListener("submit", (event) => {
   if (!text) return;
 
   const period = taskPeriod.value;
-  const id = `custom-${Date.now()}`;
-  store.customTasks.push({
+  const id = `task-${Date.now()}`;
+  store.tasks.push({
     id,
     period,
     ko: text,
     vi: text,
-    custom: true,
   });
   saveStore();
   closeModal();
@@ -450,11 +546,21 @@ addForm.addEventListener("submit", (event) => {
 });
 
 resetBtn.addEventListener("click", () => {
-  store.done = {};
-  store.customTasks = [];
-  saveStore();
+  resetDayProgress();
   render();
 });
 
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState !== "visible") return;
+  if (!ensureFreshDay()) return;
+  celebratedDate = null;
+  render();
+  showToast(t("toastNewDay"));
+  scheduleMidnightReset();
+});
+
 gaugeFill.style.strokeDasharray = String(CIRCUMFERENCE);
+const rolledOver = ensureFreshDay();
 render();
+if (rolledOver) showToast(t("toastNewDay"));
+scheduleMidnightReset();

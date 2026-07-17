@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flash Match — 베트남어·한국어 매칭</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700;800&family=DM+Sans:wght@400;700&family=Fraunces:wght@700;800&family=Noto+Sans+KR:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg" aria-hidden="true">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+    </div>
+
+    <main class="app">
+      <header class="hero">
+        <div class="top-bar">
+          <nav class="nav" aria-label="페이지 이동">
+            <a class="nav-link" href="../index.html">홈</a>
+            <a class="nav-link" href="../todo/index.html">일정</a>
+            <a class="nav-link" href="../budget/budget.html">가계부</a>
+            <a class="nav-link" href="../weather/weather.html">날씨</a>
+            <a class="nav-link is-active" href="index.html" aria-current="page">플래시</a>
+            <a class="nav-link" href="../travel/index.html">여행</a>
+            <a class="nav-link" href="../about/about.html">소개</a>
+          </nav>
+        </div>
+        <p class="eyebrow">VI ↔ KO</p>
+        <h1 class="brand">Flash Match</h1>
+        <p class="tagline">글자가 모두 보여요. 베트남어·한국어 짝을 찾아 맞추세요.</p>
+      </header>
+
+      <section class="hud" aria-live="polite">
+        <div class="hud-item hud-timer">
+          <span class="hud-label">남은 시간</span>
+          <div class="timer-row">
+            <button type="button" class="time-btn" id="time-minus" aria-label="제한 시간 줄이기">
+              −
+            </button>
+            <strong class="hud-value timer" id="timer">1:00</strong>
+            <button type="button" class="time-btn" id="time-plus" aria-label="제한 시간 늘리기">
+              +
+            </button>
+          </div>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">매칭</span>
+          <strong class="hud-value" id="match-count">0 / 15</strong>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">오답</span>
+          <strong class="hud-value" id="miss-count">0</strong>
+        </div>
+      </section>
+
+      <div class="controls">
+        <button type="button" class="btn btn-start" id="start-btn">시작</button>
+        <button type="button" class="btn btn-ghost" id="restart-btn" disabled>다시하기</button>
+      </div>
+
+      <div class="board-wrap" id="board-wrap">
+        <div class="board-lock" id="board-lock">
+          <p>시작 버튼을 누르면<br />카드가 섞이고 짝 맞추기가 시작됩니다.</p>
+        </div>
+        <div class="board" id="board" aria-label="매칭 카드판"></div>
+      </div>
+
+      <section class="answers" id="answers" hidden>
+        <div class="notebook-head">
+          <h2>전체 정답</h2>
+          <p id="answers-desc">이번 판의 베트남어·한국어 짝이에요.</p>
+        </div>
+        <ul class="answers-list" id="answers-list"></ul>
+      </section>
+
+      <section class="notebook" id="notebook" hidden>
+        <div class="notebook-head">
+          <h2>오답노트</h2>
+          <p>이번 판에서 틀린 짝을 복습하세요.</p>
+        </div>
+        <ul class="notebook-list" id="notebook-list"></ul>
+      </section>
+
+      <div class="overlay" id="overlay" hidden>
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="result-title">
+          <p class="modal-eyebrow" id="result-eyebrow">결과</p>
+          <h2 id="result-title">시간 종료!</h2>
+          <p class="modal-desc" id="result-desc"></p>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-start" id="play-again-btn">다시 도전</button>
+            <button type="button" class="btn btn-ghost" id="close-modal-btn">정답 보기</button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

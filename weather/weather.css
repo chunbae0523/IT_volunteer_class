@@ -135,7 +135,6 @@ body[data-weather="atmosphere"] {
     rgba(255, 214, 102, 0.14) 46deg 56deg,
     transparent 56deg 100deg
   );
-  animation: sun-spin 28s linear infinite;
 }
 
 @keyframes sun-pulse {
@@ -144,13 +143,7 @@ body[data-weather="atmosphere"] {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.06);
-  }
-}
-
-@keyframes sun-spin {
-  to {
-    transform: rotate(360deg);
+    transform: scale(1.04);
   }
 }
 
@@ -284,11 +277,10 @@ body[data-weather="atmosphere"] {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(240, 240, 220, 0.35),
-    rgba(240, 240, 220, 0.5),
+    rgba(240, 240, 220, 0.28),
+    rgba(240, 240, 220, 0.4),
     transparent
   );
-  filter: blur(18px);
   animation: fog-drift ease-in-out infinite;
 }
 
@@ -973,5 +965,17 @@ body[data-weather="atmosphere"] {
 
   .meters {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sun,
+  .cloud,
+  .rain-drop,
+  .snowflake,
+  .fog-layer,
+  .lightning,
+  .result {
+    animation: none !important;
   }
 }

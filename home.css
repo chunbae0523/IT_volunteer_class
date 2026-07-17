@@ -45,22 +45,11 @@ body[data-lang="vi"] .brand {
     radial-gradient(90% 70% at 8% 0%, #9ad7e8 0%, transparent 55%),
     radial-gradient(80% 60% at 100% 12%, #f0c98a 0%, transparent 48%),
     linear-gradient(165deg, #7ec8e3 0%, #3aa6c9 42%, #1f6f84 78%, #0f4c5c 100%);
-  animation: bgShift 16s ease-in-out infinite alternate;
-}
-
-@keyframes bgShift {
-  from {
-    filter: saturate(1);
-  }
-  to {
-    filter: saturate(1.1) hue-rotate(-8deg);
-  }
 }
 
 .orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(2px);
   opacity: 0.5;
   animation: float 12s ease-in-out infinite;
 }
@@ -238,6 +227,14 @@ body[data-lang="vi"] .brand {
   background: linear-gradient(160deg, rgba(126, 200, 227, 0.45), var(--surface));
 }
 
+.card-flash {
+  background: linear-gradient(160deg, rgba(232, 93, 76, 0.28), var(--surface));
+}
+
+.card-travel {
+  background: linear-gradient(160deg, rgba(240, 163, 94, 0.32), var(--surface));
+}
+
 .card-about {
   background: linear-gradient(160deg, rgba(224, 122, 95, 0.22), var(--surface));
 }
@@ -250,6 +247,18 @@ body[data-lang="vi"] .brand {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb,
+  .hero,
+  .card {
+    animation: none !important;
+  }
+
+  .card {
+    transition: none !important;
   }
 }
 

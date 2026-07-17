@@ -59,22 +59,11 @@ body[data-lang="vi"] .brand {
     radial-gradient(100% 70% at 0% 0%, #7fd4b8 0%, transparent 50%),
     radial-gradient(90% 60% at 100% 10%, #f0c98a 0%, transparent 48%),
     linear-gradient(165deg, #6bc4a4 0%, #2d8f74 40%, #1a5c4c 75%, #0f3d34 100%);
-  animation: bgShift 16s ease-in-out infinite alternate;
-}
-
-@keyframes bgShift {
-  from {
-    filter: saturate(1) hue-rotate(0deg);
-  }
-  to {
-    filter: saturate(1.12) hue-rotate(-8deg);
-  }
 }
 
 .blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(4px);
   opacity: 0.5;
   animation: float 11s ease-in-out infinite;
 }
@@ -121,22 +110,10 @@ body[data-lang="vi"] .brand {
   background: linear-gradient(
     115deg,
     transparent 30%,
-    rgba(255, 255, 255, 0.08) 48%,
+    rgba(255, 255, 255, 0.06) 48%,
     transparent 62%
   );
-  background-size: 200% 100%;
-  animation: shineSweep 9s ease-in-out infinite;
   pointer-events: none;
-}
-
-@keyframes shineSweep {
-  0%,
-  100% {
-    background-position: 100% 0;
-  }
-  50% {
-    background-position: 0% 0;
-  }
 }
 
 .app {
@@ -239,17 +216,6 @@ body[data-lang="vi"] .brand {
   line-height: 1;
   color: #fff;
   text-shadow: 0 10px 30px rgba(15, 61, 52, 0.35);
-  animation: brandPulse 4s ease-in-out infinite;
-}
-
-@keyframes brandPulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.02);
-  }
 }
 
 .tagline {
@@ -760,5 +726,15 @@ body[data-lang="vi"] .brand {
   .delete-btn {
     grid-column: 3;
     grid-row: 1 / span 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blob,
+  .hero,
+  .panel,
+  .entry-item,
+  .bar-fill {
+    animation: none !important;
   }
 }

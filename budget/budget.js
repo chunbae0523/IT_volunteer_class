@@ -9,6 +9,8 @@ const I18N = {
     navTodo: "일정",
     navBudget: "가계부",
     navWeather: "날씨",
+    navFlash: "플래시",
+    navTravel: "여행",
     navAbout: "소개",
     langBtn: "Tiếng Việt",
     eyebrow: "Daily Ledger",
@@ -48,6 +50,8 @@ const I18N = {
     navTodo: "Lịch trình",
     navBudget: "Thu chi",
     navWeather: "Thời tiết",
+    navFlash: "Flash",
+    navTravel: "Du lịch",
     navAbout: "Giới thiệu",
     langBtn: "한국어",
     eyebrow: "Sổ hàng ngày",
@@ -250,11 +254,7 @@ function updateChart() {
     const amountEl = col.querySelector(".bar-amount");
     const value = totals[cat];
     const pct = max === 0 ? 0 : Math.max((value / max) * 100, value > 0 ? 8 : 0);
-
     fill.style.setProperty("--h", `${pct}%`);
-    fill.style.animation = "none";
-    void fill.offsetWidth;
-    fill.style.animation = "";
     amountEl.textContent = formatMoney(value);
   });
 }

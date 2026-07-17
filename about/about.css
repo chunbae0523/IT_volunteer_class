@@ -69,40 +69,29 @@ body[data-lang="vi"] .brand {
       transparent 1px,
       transparent 4px
     );
-  animation: grainShift 10s linear infinite;
-}
-
-@keyframes grainShift {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-24px);
-  }
 }
 
 .beam {
   position: absolute;
   border-radius: 999px;
-  filter: blur(40px);
-  opacity: 0.55;
+  opacity: 0.4;
   animation: beamFloat 14s ease-in-out infinite;
 }
 
 .beam-a {
-  width: 340px;
-  height: 140px;
-  top: 12%;
-  left: -80px;
-  background: linear-gradient(90deg, transparent, rgba(200, 146, 74, 0.45), transparent);
+  width: 420px;
+  height: 220px;
+  top: 8%;
+  left: -100px;
+  background: radial-gradient(ellipse at center, rgba(200, 146, 74, 0.35), transparent 70%);
 }
 
 .beam-b {
-  width: 280px;
-  height: 180px;
-  right: -60px;
-  bottom: 18%;
-  background: linear-gradient(90deg, transparent, rgba(111, 125, 140, 0.4), transparent);
+  width: 360px;
+  height: 240px;
+  right: -80px;
+  bottom: 14%;
+  background: radial-gradient(ellipse at center, rgba(111, 125, 140, 0.32), transparent 70%);
   animation-delay: -5s;
 }
 
@@ -387,5 +376,19 @@ body[data-lang="vi"] .fact-title {
 
   .lead {
     font-size: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .beam,
+  .grid-line,
+  .hero,
+  .panel,
+  .cta {
+    animation: none !important;
+  }
+
+  .cta {
+    transition: none !important;
   }
 }
